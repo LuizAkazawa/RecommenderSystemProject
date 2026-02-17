@@ -14,13 +14,13 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="LoginScreen">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen 
-            name="LoginScreen" 
+            name="Login" 
             component={LoginScreen} 
           />
           <Stack.Screen 
-            name="SignupScreen" 
+            name="Signup" 
             component={SignupScreen} 
           />
           <Stack.Screen 
