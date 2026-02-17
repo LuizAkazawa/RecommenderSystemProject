@@ -1,39 +1,43 @@
-import { FlatList, Text, View, TouchableOpacity, Image } from 'react-native';
+import { FlatList, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
 import styles from '../../styles/globalStyles.ts';
 
 import { connectionPython } from '../../services/api.js';
 
-// need to change this and use dynamic data (recommender system)
-const DATA = [
-  { id: '1', title: 'Music 1' },
-  { id: '2', title: 'Music 2' },
-  { id: '3', title: 'Music 3' },
-  { id: '4', title: 'Music 4' },
-  { id: '5', title: 'Music 5' },
-  { id: '6', title: 'Music 6' },
-  { id: '7', title: 'Music 7' },
-  { id: '8', title: 'Music 8' },
-  { id: '9', title: 'Music 9' },
-  { id: '10', title: 'Music 10' },
-  { id: '11', title: 'Music 11' },
-  { id: '12', title: 'Music 12' },
-];
 
 //HomeScreen to see all the music options
 const HomeScreen = ({ route, navigation }) => {
   const { username } = route.params;
+
+  const [musicData, setMusicData] = useState([]); 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTracks();
+  }, []);
+
+  const fetchTracks = async () =>{
+    try{
+      const response = await connectionPython('tracks');
+      setMusicData(response);
+    }catch(error) {
+      console.error("Error fetching music: ", error)
+    }finally{
+      setIsLoading(false);
+    }
+  };
+
   //renders all musics
   const renderItem = ({ item }) => (
       <View style={styles.logoView}>
       <TouchableOpacity 
           style={styles.gridItem}
-
-          onPress={() => navigation.navigate('Details', { item: item })}
+          onPress={() => navigation.navigate('Details', { item: item, user: username })}
       >
           <Image style={styles.musicLogo} source={require('../../assets/images/closer_image.jpg')} resizeMode='cover' />
       </TouchableOpacity>
-      <Text style={styles.musicName}>{item.title}</Text>
+      <Text style={styles.musicName}>{item.track_name}</Text>
       </View>
   );
 
@@ -52,13 +56,17 @@ const HomeScreen = ({ route, navigation }) => {
 
     {/*need to think about using the name of the music instead of logo/image*/}
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={DATA}
-        numColumns={2}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.gridContainer}
-      />
+      {isLoading ? (
+        <ActivityIndicator size='large' color='#0000ff'/>
+      ) : (
+        <FlatList
+          data={musicData}
+          numColumns={2}
+          renderItem={renderItem}
+          keyExtractor={item => item.track_id.toString()}
+          contentContainerStyle={styles.gridContainer}
+        />
+      )}
     </View>
   </View>
 );
