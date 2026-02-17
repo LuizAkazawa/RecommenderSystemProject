@@ -23,11 +23,12 @@ const connectionPython = async (endpoint, method="GET", data=null) => {
 };
 
 //add music to python server memory
-const addMusic = async (title, artist, duration) => {
+const addMusic = async (username, track_id, played_duration, total_duration) => {
   const newMusic = {
-    title: title,
-    artist: artist,
-    duration: duration
+    username: username,
+    track_id: track_id,
+    played_duration: played_duration,
+    total_duration: total_duration
   };
   const result = await connectionPython('music', 'POST', newMusic);
 
@@ -76,8 +77,10 @@ try {
     if (response.ok) {
     Alert.alert("Success", "Account created! Please login.");
     navigation.navigate("LoginScreen");
-    } else {
-    Alert.alert("Error", "Could not create account");
+    } else if (response.status == 400) {
+    Alert.alert("Error", "Username already taken");
+    }else {
+    Alert.alert("Error", "Try again later");
     }
 } catch (error) {
     console.error(error);
