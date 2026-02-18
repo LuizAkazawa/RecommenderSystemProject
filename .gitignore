@@ -93,3 +93,5 @@ env/
 .env.production.local
 
 .pytest_cache/
+
+recomSystemPy/ipynb_files

@@ -14,7 +14,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const [position, setPosition] = useState(0); 
     const [isPlaying, setIsPlaying] = useState(true); // To pause/play
 
-    const durationSec = item.total_duration / 1000; 
+    const durationSec = item.duration_ms / 1000; 
 
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
@@ -47,8 +47,8 @@ const DetailsScreen = ({ route, navigation }) => {
         console.log(timingPlaying);
         
         return () => {
-          const finalTime = (timingPlaying.current > item.total_duration) ? item.total_duration : timingPlaying.current
-          addMusic(user, item.track_id, finalTime * 1000, item.total_duration);
+          const finalTime = (1000 + timingPlaying.current * 1000 > item.duration_ms) ? item.duration_ms : timingPlaying.current * 1000
+          addMusic(user, item.track_id, finalTime, item.duration_ms);
         }
       }, [item.track_id])
     )

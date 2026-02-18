@@ -50,9 +50,13 @@ const handleLogin = async (name, password, navigation) => {
                 password: password
             }),
         });
-        console.log(response)
         if (response.ok) {
-            navigation.navigate('Home', { username: name });
+            const data = await response.json();
+            navigation.navigate('Home', { 
+                username: data.username,
+                userID: data.user_id
+
+            });
         } else {
             Alert.alert("Login Failed", "User not found or wrong password");
         }
@@ -76,7 +80,7 @@ try {
 
     if (response.ok) {
     Alert.alert("Success", "Account created! Please login.");
-    navigation.navigate("LoginScreen");
+    navigation.navigate("Login");
     } else if (response.status == 400) {
     Alert.alert("Error", "Username already taken");
     }else {

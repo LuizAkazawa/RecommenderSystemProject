@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Mail, Lock } from 'lucide-react-native';
 
 import styles from './LoginScreen.styles';
@@ -46,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.footer}>
         <Text style={styles.signUp}>Don't have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
           <Text style={styles.signUpLink}>Sign Up</Text>
         </TouchableOpacity>
       </View>
