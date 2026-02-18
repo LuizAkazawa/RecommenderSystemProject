@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+current_file = Path(__file__).resolve()
+project_root = current_file.parent.parent  # up to 2 levels
+sys.path.append(str(project_root))
+
 import pandas as pd
 import numpy as np
 import torch
@@ -7,11 +14,10 @@ from torch.utils.data import Dataset, DataLoader
 import faiss
 import pickle
 from sklearn.preprocessing import MinMaxScaler
-import config
-from model import TwoTowerModel
 
-import pandas as pd
-from utils import load_data_userInteractions, load_data_tracks
+from app import config
+from app.ml.model import TwoTowerModel
+from app.utils import load_data_userInteractions, load_data_tracks
 
 
 

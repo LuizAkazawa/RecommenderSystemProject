@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pickle
-from inference import RecommenderSystem
+from app.ml.inference import RecommenderSystem
 from utils import get_db_connection, get_user_history
 
 app = FastAPI()

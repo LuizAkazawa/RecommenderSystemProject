@@ -1,11 +1,18 @@
 import torch
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+ARTIFACTS_DIR = BASE_DIR / "artifacts"
+DATASET_DIR = BASE_DIR / "dataset"
+
 
 # Paths
-MODEL_PATH = "spotify_two_tower.pth"
-MAPPINGS_PATH = "mappings.pkl"
-SCALER_PATH = "scaler.pkl"
-FAISS_INDEX_PATH = "spotify_songs.index"
-SONG_CATALOG_PATH = "song_catalog.pkl"
+MODEL_PATH = ARTIFACTS_DIR / "spotify_two_tower.pth"
+SCALER_PATH = ARTIFACTS_DIR / "scaler.pkl"
+FAISS_INDEX_PATH = str(ARTIFACTS_DIR / "spotify_songs.index")
+SONG_CATALOG_PATH = ARTIFACTS_DIR / "song_catalog.pkl"
+MAPPINGS_PATH = ARTIFACTS_DIR / "mappings.pkl"
 
 # Hyperparameters
 BATCH_SIZE = 256
