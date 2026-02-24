@@ -1,20 +1,21 @@
 import { useRef, useCallback, useState, useEffect } from 'react';
-import { Text, View, Image, Button, StyleSheet } from 'react-native';
+import { Text, View, Image, Button } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Slider from '@react-native-community/slider';
+import styles from './DetailsScreen.styles';
 
 import { addMusic } from '../../services/api.js';
 
 const DetailsScreen = ({ route, navigation }) => {
     const { item, user } = route.params;
-    const timingPlaying = useRef(timePlayed);
 
-    const[timePlayed, setTimePlayed] = useState(0);
-
-    const [position, setPosition] = useState(0); 
+    const [position, setPosition] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true); // To pause/play
+ 
+    const positionRef = useRef(position);
+    positionRef.current = position;
 
-    const durationSec = item.duration_ms / 1000; 
+    const durationSec = item.duration_ms / 1000;
 
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
@@ -22,101 +23,73 @@ const DetailsScreen = ({ route, navigation }) => {
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
-    // Timer Logic
-    //I probably need to optimize this
     useEffect(() => {
         let interval = null;
 
         if (isPlaying && position < durationSec) {
             interval = setInterval(() => {
                 setPosition((prev) => prev + 1);
-                setTimePlayed((prev) => prev + 1)
             }, 1000); // Update every 1 second
         } else if (position >= durationSec) {
             setIsPlaying(false);
             setPosition(durationSec);
         }
 
-        return () => {clearInterval(interval);} // Cleanup on unmount/pause
-    }, [isPlaying, position]);
+        return () => { clearInterval(interval); }; 
+    }, [isPlaying, position, durationSec]);  // Cleanup on unmount/pause
 
-    timingPlaying.current = timePlayed;
     useFocusEffect(
-      useCallback(() => {
-        console.log(item.track_id);
-        console.log(timingPlaying);
-        
-        return () => {
-          const finalTime = (1000 + timingPlaying.current * 1000 > item.duration_ms) ? item.duration_ms : timingPlaying.current * 1000
-          addMusic(user, item.track_id, finalTime, item.duration_ms);
-        }
-      }, [item.track_id])
-    )
+        useCallback(() => {
+            //console.log(item.track_id);
 
-    // Handle User Dragging Slider
+            return () => {
+                const playedMs = positionRef.current * 1000;
+                const finalTime = Math.min(playedMs + 1000, item.duration_ms);
+                addMusic(user, item.track_id, finalTime, item.duration_ms);
+            };
+        }, [item.track_id])
+    );
+
     const onSlide = (value) => {
         setPosition(value);
     };
-    
 
-    //Need to change this style and put into the folder ./styles
     return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>{item.track_name}</Text>
-      <Text>ID: {item.track_id}</Text>
-      
-      <Image 
-        style={{ width: 200, height: 200, marginVertical: 20, borderRadius: 10 }} 
-        source={require('../../assets/images/closer_image.jpg')} 
-        resizeMode='cover'
-      />
+        <View style={styles.container}>
+            <Text style={styles.title}>{item.track_name}</Text>
+            <Text style={styles.trackId}>ID: {item.track_id}</Text>
 
-      <View style={{ width: '80%', marginTop: 20 }}>
-          <Slider
-            style={{ width: '100%', height: 40 }}
-            minimumValue={0}
-            maximumValue={durationSec}
-            value={position}
-            onValueChange={onSlide} // Called when user drags
-            minimumTrackTintColor="#1EB1FC"
-            maximumTrackTintColor="#d3d3d3"
-            thumbTintColor="#1EB1FC"
-          />
-          <View style={styles.timeContainer}>
-              <Text>{formatTime(position)}</Text>
-              <Text>{formatTime(durationSec)}</Text>
-          </View>
-      </View>
+            <Image
+                style={styles.albumArt}
+                source={require('../../assets/images/closer_image.jpg')}
+                resizeMode='cover'
+            />
 
+            <View style={styles.sliderContainer}>
+                <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={durationSec}
+                    value={position}
+                    onValueChange={onSlide}
+                    minimumTrackTintColor="#1EB1FC"
+                    maximumTrackTintColor="#d3d3d3"
+                    thumbTintColor="#1EB1FC"
+                />
+                <View style={styles.timeContainer}>
+                    <Text>{formatTime(position)}</Text>
+                    <Text>{formatTime(durationSec)}</Text>
+                </View>
+            </View>
 
-      <View style={styles.buttonContainer}>
-          <Button 
-            title={isPlaying ? "Pause" : "Play"} 
-            onPress={() => setIsPlaying(!isPlaying)} 
-          />
-      </View>
-
-
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        backgroundColor: '#fff'
-    },
-    title: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-    id: { marginBottom: 20 },
-    image: { width: 200, height: 200, borderRadius: 10 },
-    timeContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-    },
-    buttonContainer: { marginTop: 30, gap: 10 }
-});
+            <View style={styles.buttonContainer}>
+                <Button
+                    title={isPlaying ? "Pause" : "Play"}
+                    onPress={() => setIsPlaying(!isPlaying)}
+                />
+            </View>
+        </View>
+    );
+};
 
 export default DetailsScreen;
