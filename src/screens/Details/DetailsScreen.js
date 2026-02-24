@@ -6,14 +6,13 @@ import styles from './DetailsScreen.styles';
 
 import { addMusic } from '../../services/api.js';
 
-const DetailsScreen = ({ route, navigation }) => {
+const DetailsScreen = ({ route }) => {
     const { item, user } = route.params;
 
     const [position, setPosition] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true); // To pause/play
- 
-    const positionRef = useRef(position);
-    positionRef.current = position;
+
+    const timePlayedRef = useRef(0); 
 
     const durationSec = item.duration_ms / 1000;
 
@@ -29,23 +28,22 @@ const DetailsScreen = ({ route, navigation }) => {
         if (isPlaying && position < durationSec) {
             interval = setInterval(() => {
                 setPosition((prev) => prev + 1);
+                timePlayedRef.current += 1; // Only increments when actually playing
             }, 1000); // Update every 1 second
         } else if (position >= durationSec) {
             setIsPlaying(false);
             setPosition(durationSec);
         }
 
-        return () => { clearInterval(interval); }; 
-    }, [isPlaying, position, durationSec]);  // Cleanup on unmount/pause
+        return () => { clearInterval(interval); };
+    }, [isPlaying, position, durationSec]); // Cleanup on unmount/pause
 
     useFocusEffect(
         useCallback(() => {
             //console.log(item.track_id);
-
             return () => {
-                const playedMs = positionRef.current * 1000;
-                const finalTime = Math.min(playedMs + 1000, item.duration_ms);
-                addMusic(user, item.track_id, finalTime, item.duration_ms);
+                const finalTime = Math.min(timePlayedRef.current * 1000, item.duration_ms);
+                addMusic(user, item.track_id, Math.round(finalTime), Math.round(item.duration_ms));
             };
         }, [item.track_id])
     );
