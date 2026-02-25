@@ -27,8 +27,8 @@ const addMusic = async (username, track_id, played_duration, total_duration) => 
   const newMusic = {
     username: username,
     track_id: track_id,
-    played_duration: played_duration,
-    total_duration: total_duration
+    played_duration: Math.round(played_duration),
+    total_duration: Math.round(total_duration)
   };
   const result = await connectionPython('music', 'POST', newMusic);
 
