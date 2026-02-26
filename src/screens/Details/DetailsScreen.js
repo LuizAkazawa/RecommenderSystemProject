@@ -2,7 +2,8 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 import { Text, View, Image, Button } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Slider from '@react-native-community/slider';
-import styles from './DetailsScreen.styles';
+import styles from './DetailsScreen_styles';
+import MusicCover from '../../components/MusicCover';
 
 import { addMusic } from '../../services/api.js';
 
@@ -57,11 +58,9 @@ const DetailsScreen = ({ route }) => {
             <Text style={styles.title}>{item.track_name}</Text>
             <Text style={styles.trackId}>ID: {item.track_id}</Text>
 
-            <Image
-                style={styles.albumArt}
-                source={require('../../assets/images/closer_image.jpg')}
-                resizeMode='cover'
-            />
+            <View style={styles.albumArt}>
+                <MusicCover trackName={item.track_name} />
+            </View>
 
             <View style={styles.sliderContainer}>
                 <Slider

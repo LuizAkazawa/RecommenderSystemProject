@@ -1,8 +1,8 @@
 import { FlatList, Text, View, TouchableOpacity, Image, ActivityIndicator, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
-
-import styles from '../../styles/globalStyles.ts';
-
+import styles from './HomeScreen_styles.ts';
+import { colors } from '../../styles/colors.js';
+import MusicCover from '../../components/MusicCover';
 import { connectionPython } from '../../services/api.js';
 
 
@@ -12,8 +12,6 @@ const HomeScreen = ({ route, navigation }) => {
 
   const [musicData, setMusicData] = useState([]); 
   const [isLoading, setIsLoading] = useState(true);
-
-
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -45,18 +43,20 @@ const HomeScreen = ({ route, navigation }) => {
   //renders all musics
   const renderItem = ({ item }) => (
       <View style={styles.logoView}>
-      <TouchableOpacity 
-          style={styles.gridItem}
-          onPress={() => navigation.navigate('Details', { item: item, user: username })}
-      >
-          <Image style={styles.musicLogo} source={require('../../assets/images/closer_image.jpg')} resizeMode='cover' />
-      </TouchableOpacity>
-      <Text style={styles.musicName}>{item.track_name.toString()} - {item.genre.toString()}</Text>
+        <TouchableOpacity 
+            style={styles.gridItem}
+            onPress={() => navigation.navigate('Details', { item: item, user: username })}
+        >
+            <MusicCover trackName={item.track_name} />
+        </TouchableOpacity>
+        <Text style={styles.musicName} numberOfLines={2} ellipsizeMode='tail'>
+            {item.track_name.toString()} - {item.genre.toString()}
+        </Text>
       </View>
   );
 
   return (
-  <View style={{ flex: 1, backgroundColor: '#eee' }}>
+  <View style={{ flex: 1, backgroundColor: colors.backgroundGrey}}>
     <View style={styles.header_main}>
       <View style={styles.left_group}>
         <Image style={styles.header_photo} source={require('../../assets/images/closer_image.jpg')} resizeMode='cover'/>
@@ -84,8 +84,8 @@ const HomeScreen = ({ route, navigation }) => {
                 <RefreshControl 
                   refreshing={refreshing} 
                   onRefresh={onRefresh}
-                  colors={['#0000ff']} 
-                  tintColor="#0000ff"  
+                  colors={[colors.primary]} 
+                  tintColor={colors.primary}  
                 />
               }
             />

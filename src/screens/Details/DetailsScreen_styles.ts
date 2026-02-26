@@ -20,11 +20,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   albumArt: {
-    width: 200,
-    height: 200,
+    width: 280,
+    height: 280,
+    borderRadius: 30,
+    alignSelf: 'center',
+    overflow: 'hidden',
     marginVertical: 20,
-    borderRadius: 10,
-  },
+},
   sliderContainer: {
     width: '80%',
     marginTop: 20,

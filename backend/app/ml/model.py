@@ -1,7 +1,15 @@
+from pathlib import Path
+import sys
+
+# Probably I will change in the future
+current_file = Path(__file__).resolve()
+project_root = current_file.parent.parent.parent  # up to 3 levels
+sys.path.append(str(project_root))
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import config
+import app.config as config
 
 class TwoTowerModel(nn.Module):
     def __init__(self, 

@@ -94,4 +94,4 @@ env/
 
 .pytest_cache/
 
-recomSystemPy/ipynb_files
+./ipynb_files

@@ -1,10 +1,17 @@
+from pathlib import Path
+import sys
+
+current_file = Path(__file__).resolve()
+project_root = current_file.parent.parent.parent  # up to 3 levels
+sys.path.append(str(project_root))
+
 import torch
 import faiss
 import pickle
 import pandas as pd
 import numpy as np
-import config
-from model import TwoTowerModel
+import app.config as config
+from app.ml.model import TwoTowerModel
 
 class RecommenderSystem:
     def __init__(self):

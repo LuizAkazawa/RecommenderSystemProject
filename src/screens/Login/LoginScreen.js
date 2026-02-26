@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Mail, Lock } from 'lucide-react-native';
 
-import styles from './LoginScreen.styles';
+import styles from './LoginScreen_styles';
+import { colors } from '../../styles/colors.js';
 
 
 import { handleLogin } from '../../services/api'; 
@@ -16,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
       <Text style={styles.title}>Welcome Back</Text>
 
       <View style={styles.inputContainer}>
-        <Mail color="#666" size={20} style={styles.icon} />
+        <Mail color={colors.textLight} size={20} style={styles.icon} />
         <TextInput
           style={styles.input}
           placeholder="Name"
@@ -29,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.inputContainer}>
-        <Lock color="#666" size={20} style={styles.icon} />
+        <Lock color={colors.textLight} size={20} style={styles.icon} />
         <TextInput
           style={styles.input}
           placeholder="Password"

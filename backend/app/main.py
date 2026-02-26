@@ -1,13 +1,21 @@
+from pathlib import Path
+import sys
+
+current_file = Path(__file__).resolve()
+project_root = current_file.parent.parent # up to 2 levels
+sys.path.append(str(project_root))
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pickle
 from app.ml.inference import RecommenderSystem
-from utils import get_db_connection, get_user_history
+from app.utils import get_db_connection, get_user_history
+import config
 
 app = FastAPI()
 
 # recommender 
-with open("scaler.pkl", "rb") as f:
+with open(config.SCALER_PATH, "rb") as f:
     scaler = pickle.load(f)
 
 recsys = RecommenderSystem()

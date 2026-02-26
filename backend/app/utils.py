@@ -73,7 +73,7 @@ def load_data_userInteractions():
         chunk_df['weight'] = (chunk_df['played_duration_ms'] / chunk_df['total_duration_ms']).clip(0, 1)
         chunk_df = chunk_df.drop(columns=['played_duration_ms', 'total_duration_ms'])
         chunks.append(chunk_df)
-        print(f"Loaded a chunk of {len(chunk_df)} rows...")
+        #print(f"Loaded a chunk of {len(chunk_df)} rows...")
 
     full_df = pd.concat(chunks, ignore_index=True)
     print(f"Loaded {len(full_df)} rows successfully!")

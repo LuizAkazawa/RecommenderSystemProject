@@ -3,10 +3,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import HomeScreen from './screens/Home/HomeScreen';
-import DetailsScreen from './screens/Details/DetailsScreen';
-import LoginScreen from './screens/Login/LoginScreen'
-import SignupScreen from './screens/Login/SignupScreen'
+import HomeScreen from './src/screens/Home/HomeScreen';
+import DetailsScreen from './src/screens/Details/DetailsScreen';
+import LoginScreen from './src/screens/Login/LoginScreen'
+import SignupScreen from './src/screens/Signup/SignupScreen'
 
 const Stack = createNativeStackNavigator();
 
