@@ -1,9 +1,11 @@
 import { Alert } from 'react-native';
 
+
+// const BASE_URL = 'http://localhost:8000'; // PHYSICAL DEVICES 
+const BASE_URL = 'http://10.0.2.2:8000'; // EMULATOR
 //test connection with python (do some changes)
 const connectionPython = async (endpoint, method="GET", data=null) => {
     try{
-        const BASE_URL = 'http://localhost:8000';
         const response = await fetch(`${BASE_URL}/${endpoint}`, {
             method: method,
             headers: {
@@ -42,7 +44,7 @@ const addMusic = async (username, track_id, played_duration, total_duration) => 
 //keep login data and verify if account exists
 const handleLogin = async (name, password, navigation) => {
     try {
-        const response = await fetch('http://localhost:8000/login', {
+        const response = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -69,7 +71,7 @@ const handleLogin = async (name, password, navigation) => {
 //verify if it's possible to create account and keep in python server memory
 const handleSignUp = async (name, password, navigation) => {
 try {
-    const response = await fetch('http://localhost:8000/signup', {
+    const response = await fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 

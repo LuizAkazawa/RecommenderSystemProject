@@ -3,26 +3,43 @@ import { colors } from '../../styles/colors.js';
 
 const styles = StyleSheet.create({
     header_main: {
-        height: 120,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: colors.headerBackground,
+        height: 100,
         paddingHorizontal: 15,
+        paddingTop: 12,
+        paddingBottom: 16,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 8,
     },
-    left_group: {
+    hamburger_button: {
+        position: 'absolute',
+        top: 50,
+        right: 15,
+    },
+    hamburger_icon: {
+        fontSize: 50,
+        color: colors.textWhite,
+        lineHeight: 32,
+    },
+    header_left: {
         flexDirection: 'row',
         alignItems: 'center',
+        gap: 8,
     },
     header_photo: {
-        height: 60,
-        width: 60,
+        height: 64,
+        width: 64,
         backgroundColor: colors.photoBackground,
-        borderRadius: 30,
+        borderRadius: 14,
     },
     header_name: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
+        color: colors.textWhite,
     },
     gridContainer: {
         padding: 10,

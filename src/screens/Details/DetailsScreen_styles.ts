@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
     color: colors.text,
+    textAlign: 'center',
   },
   trackId: {
     fontSize: 14,

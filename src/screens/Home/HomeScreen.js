@@ -1,5 +1,6 @@
 import { FlatList, Text, View, TouchableOpacity, Image, ActivityIndicator, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import styles from './HomeScreen_styles.ts';
 import { colors } from '../../styles/colors.js';
 import MusicCover from '../../components/MusicCover';
@@ -56,19 +57,24 @@ const HomeScreen = ({ route, navigation }) => {
   );
 
   return (
-  <View style={{ flex: 1, backgroundColor: colors.backgroundGrey}}>
-    <View style={styles.header_main}>
-      <View style={styles.left_group}>
-        <Image style={styles.header_photo} source={require('../../assets/images/closer_image.jpg')} resizeMode='cover'/>
-        <Text style={styles.header_name}> { username } </Text>
-      </View>
-      <TouchableOpacity>
-        <Text>OPTIONS</Text>
-      </TouchableOpacity>
-    </View>
+    <View style={{ flex: 1, backgroundColor: colors.backgroundGrey }}>
+      <LinearGradient
+        colors={['#007BFF', '#0040A0']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={styles.header_main}
+      >
+        <TouchableOpacity style={styles.hamburger_button}>
+          <Text style={styles.hamburger_icon}>≡</Text>
+        </TouchableOpacity>
+
+        <View style={styles.header_left}>
+          <MusicCover style ={styles.header_photo} trackName={username} />
+          <Text style={styles.header_name}>{username}</Text>
+        </View>
+      </LinearGradient>
 
 
-    {/*need to think about using the name of the music instead of logo/image*/}
     <View style={{ flex: 1 }}>
           {isLoading ? (
             <ActivityIndicator size='large' color='#0000ff'/>
