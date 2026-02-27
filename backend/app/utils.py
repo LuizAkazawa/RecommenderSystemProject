@@ -108,3 +108,48 @@ def load_data_tracks():
     
     print(f"Loaded {len(full_df)} tracks successfully!")
     return full_df
+
+
+def get_popular_tracks(limit=50):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = '''
+        SELECT 
+            t.track_id,
+            t.track_name,
+            t.track_artist,
+            t.playlist_genre, 
+            t.duration_ms,
+            COUNT(ui.interaction_id) AS total_listens,
+            AVG(CAST(ui.played_duration_ms AS FLOAT) / NULLIF(ui.total_duration_ms, 0)) AS avg_completion_rate
+        FROM 
+            tracks t
+        JOIN 
+            user_interactions ui ON t.track_id = ui.track_id
+        GROUP BY 
+            t.track_id,
+            t.track_name,
+            t.track_artist
+        HAVING 
+            COUNT(ui.interaction_id) >= 50
+        ORDER BY 
+            avg_completion_rate DESC
+            LIMIT %s
+    '''
+    cursor.execute(query, (limit,))
+    results = cursor.fetchall()
+    conn.close()
+    recommendations = []
+    for row in results:
+        recommendations.append({
+            "track_id": row[0],
+            "track_name": row[1],
+            "artist": row[2],
+            "genre": row[3],
+            "duration_ms": row[4]
+        })
+        if len(recommendations) >= limit:
+            break
+    
+    return recommendations
+    

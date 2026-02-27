@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pickle
 from app.ml.inference import RecommenderSystem
-from app.utils import get_db_connection, get_user_history
+from app.utils import get_db_connection, get_user_history, get_popular_tracks
 import config
 
 app = FastAPI()
@@ -48,7 +48,7 @@ def recommend_endpoint(user_id: int):
     user_history_df = get_user_history(user_id, scaler)
     
     if user_history_df is None:
-        raise HTTPException(status_code=404, detail="User not found or no history")
+        return {"user_id": user_id, "recommendations": get_popular_tracks(limit=50)}
     
     try:
         recommendations = recsys.recommend(user_history_df, k=50)
